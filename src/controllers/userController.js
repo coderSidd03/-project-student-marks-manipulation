@@ -2,7 +2,8 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const userModel = require("../models/userModel");
-const { checkEmptyBody, isValid, isValidEmail, isValidPhone, isValidObjectId, isValidName, isValidPassword } = require("../validation/validation");        // validations   
+const { uploadFile } = require("../AWS/aws");
+const { checkEmptyBody, isValid, isValidEmail, isValidPhone, isValidObjectId, isValidName, isValidPassword, isValidImageLink } = require("../validation/validation");        // validations   
 
 
 // >>>>>>>>>>  function to encrypt a password ============================//
@@ -18,6 +19,7 @@ const encryptPassword = async (pass) => {
 const registerUser = async (req, res) => {
     try {
         let requestBody = req.body;                                     // taking data from body
+        let files = req.files;
 
         let { fname, lname, email, phone, password } = requestBody;     // destructuring
 
@@ -45,6 +47,14 @@ const registerUser = async (req, res) => {
 
         let isPresentPhone = await userModel.findOne({ phone: phone });
         if (isPresentPhone) return res.status(409).send({ status: false, message: `phone: ${phone} is already present in DB. please try again with different phone..` });
+
+        // checking that profile image is present and validating.. then assigning to body
+        if (!files || files.length == 0) return res.status(400).send({ status: false, message: "please provide image for profileImage" });
+
+        const image = await uploadFile(files[0]);
+
+        if (!isValidImageLink(image)) return res.status(400).send({ status: false, msg: "profileImage is in incorrect format required format must be between: .jpg / .jpeg / .png / .bmp / .gif " });
+        requestBody.profileImage = image;
 
         //assigning encrypted password
         requestBody.password = await encryptPassword(password);         // assigning encrypted password to body

@@ -1,16 +1,18 @@
 //===================== Importing module and packages =====================//
 const express = require("express");
 const mongoose = require("mongoose");
-const moment = require("moment")
+const moment = require("moment");
+const multer = require("multer");
 const route = require("./routes/route");
 const PORT = process.env.PORT || 3000;
 
 const app = express();
 
 app.use(express.json());
+app.use(multer().any());
 
 //===================== Connecting Mongo DB database cluster =====================//
-mongoose.connect("mongodb+srv://soumya03:HDDAkiZhotm1eGf5@cluster0.ge3cm6p.mongodb.net/mini_project_student-data-manipulation", {
+mongoose.connect("mongodb+srv://functionUp:1LUGnb4soc2cBWt5@cluster0.ge3cm6p.mongodb.net/mini_project_student-data-manipulation", {
   useNewUrlParser: true
 })
   .then(() => console.log('database connected..'))
