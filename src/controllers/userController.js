@@ -15,7 +15,7 @@ const encryptPassword = async (pass) => {
 
 //---------------------------------------->   - User API -    <----------------------------------------------//
 
-//=================================== Register User ===================================<<< /register >>> //
+//=================================== Register User ===================================<<< /register >>>//
 const registerUser = async (req, res) => {
     try {
         let requestBody = req.body;                                     // taking data from body
@@ -49,9 +49,11 @@ const registerUser = async (req, res) => {
         if (isPresentPhone) return res.status(409).send({ status: false, message: `phone: ${phone} is already present in DB. please try again with different phone..` });
 
         // checking that profile image is present and validating.. then assigning to body
-        if (!files || files.length == 0) return res.status(400).send({ status: false, message: "please provide image for profileImage" });
-
-        const image = await uploadFile(files[0]);
+        if (!files || files.length == 0) {
+            image = "https://classroom-training-bucket.s3.ap-south-1.amazonaws.com/plutonium/backend%20assignment/user/profileImage/dummy_User.png";
+        } else {
+            const image = await uploadFile(files[0]);
+        }
 
         if (!isValidImageLink(image)) return res.status(400).send({ status: false, msg: "profileImage is in incorrect format required format must be between: .jpg / .jpeg / .png / .bmp / .gif " });
         requestBody.profileImage = image;
@@ -67,7 +69,7 @@ const registerUser = async (req, res) => {
     }
 }
 
-//==================================== User Login =========================================<<< /login >>>//
+//==================================== User Login =====================================<<< /login >>>//
 const loginUser = async (req, res) => {
     try {
         const credentials = req.body;               // taking body data

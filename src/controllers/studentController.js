@@ -6,6 +6,9 @@ const userModel = require("../models/userModel");
 const { checkEmptyBody, isValid, isValidObjectId, isValidName, isValidNum } = require("../validation/validation");        // validations   
 
 
+//---------------------------------------->   - Student API -    <----------------------------------------------//
+
+//=================================== add student =======================================//
 const addStudent = async (req, res) => {
     try {
         let userIdFromToken = req.userId;                               // collecting userId from request by token
@@ -51,6 +54,7 @@ const addStudent = async (req, res) => {
     }
 }
 
+//=================================== update student ====================================//
 const updateStudent = async (req, res) => {
     try {
 
@@ -116,6 +120,7 @@ const updateStudent = async (req, res) => {
 
 }
 
+//=================================== get student =======================================//
 const getStudentById = async (req, res) => {
     try {
         let userIdFromToken = req.userId;                                   // collecting userId from request by token
@@ -187,6 +192,7 @@ const getStudentByFilter = async (req, res) => {
     }
 }
 
+//=================================== delete student ===================================//
 const deleteStudent = async (req, res) => {
     try {
         let userIdFromToken = req.userId;                                   // collecting userId from request by token
@@ -209,7 +215,7 @@ const deleteStudent = async (req, res) => {
 
         if (studentData.isDeleted === true) return res.status(404).send({ status: false, message: `the student with studentId: ${studentId}, has been deleted already.` });
 
-        // deleting the product
+        // deleting the student
         let deleteStudent = await studentModel.findOneAndUpdate(
             { _id: studentId },
             { isDeleted: true, deletedAt: new Date() },
