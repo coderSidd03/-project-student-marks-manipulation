@@ -15,8 +15,6 @@ const isValid = (value) => {
     return true;
 };                                                                                    // Validating that the Input must be a non-empty String
 
-const isValidNum = (num) => { return ((/^\s*[+-]?(\d+|\d*\.\d+|\d+\.\d*)([Ee][+-]?\d+)?\s*$/).test(num)); };
-
 
 //* USER DETAILS VALIDATIONS *//
 const isValidName = (name) => { return ((/^[a-zA-Z ]+$/).test(name)); };                                            // Name Validation
@@ -40,6 +38,5 @@ module.exports = {
     isValidObjectId,
     isValidName,
     isValidPassword,
-    isValidNum,
     isValidImageLink
 };

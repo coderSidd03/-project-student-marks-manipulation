@@ -3,7 +3,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const studentModel = require("../models/studentModel");
 const userModel = require("../models/userModel");
-const { checkEmptyBody, isValid, isValidObjectId, isValidName, isValidNum } = require("../validation/validation");        // validations   
+const { checkEmptyBody, isValid, isValidObjectId, isValidName } = require("../validation/validation");        // validations   
 
 
 //---------------------------------------->   - Student API -    <----------------------------------------------//
@@ -31,6 +31,7 @@ const addStudent = async (req, res) => {
         // validating all the required fields 
         if (!isValidName(studentName)) return res.status(400).send({ status: false, message: `studentName: ${studentName} is invalid` });
         if (!isValidName(subject)) return res.status(400).send({ status: false, message: `subject: ${subject} is invalid` });
+        if (typeof (marks) !== "number") return res.status(400).send({ status: false, message: `marks: ${marks} is invalid, it must be number` });
         if (!isValidObjectId(userIdFromParams)) return res.status(400).send({ status: false, message: `userId: ${userIdFromParams} is invalid` });
 
         if (userIdFromToken != userIdFromParams) return res.status(403).send({ status: false, message: `unauthorized access userId mismatch with token` });
@@ -104,7 +105,7 @@ const updateStudent = async (req, res) => {
 
         if (marks) {
 
-            if (!isValidNum(marks)) return res.status(400).send({ status: false, message: `marks: ${marks}, is not valid` });
+            if (typeof (marks) !== "number") return res.status(400).send({ status: false, message: `marks: ${marks}, is not valid` });
 
             findStudentData.marks = marks;
         }
